@@ -1,0 +1,778 @@
+/* =========================================================
+   GLOBAL TUNING VARIABLES
+   Change these first before editing individual sections.
+   ========================================================= */
+
+:root {
+  --main-bg: rgb(189, 204, 212);
+  --about-bg: rgb(255, 255, 255);
+
+  --text-grey: rgb(153, 153, 153);
+  --panel-fill: rgb(51, 51, 51);
+  --panel-stroke: rgb(128, 128, 128);
+
+  --font-main: "DIN Regular Web", Arial, sans-serif;
+
+  /* Font-weight tuning:
+     400 = true DIN Regular
+     500 = slightly boldened DIN Regular, recommended test setting
+     600 = stronger synthetic weight
+     700 = browser-synthesised bold, probably too heavy
+  */
+  --site-font-weight: 600;
+
+  --small-text-size: 11px;
+  --about-body-size: 24px;
+  --about-body-offset: calc(var(--about-body-size) * 1.2);
+
+  --header-padding-x: 20px;
+  --header-padding-y: 20px;
+  --header-height: 120px;
+  --header-column-width: 260px;
+  --header-column-gap: 30px;
+
+  --project-side-margin: 54px;
+  --project-top-margin: 13vh;
+  --project-bottom-margin: 13vh;
+  --project-panel-radius: 8px;
+  --project-panel-border: 1px;
+
+  --project-codebar-height: 24px;
+  --project-bottom-height: 188px;
+  --project-panel-gap: 5px;
+
+  --project-text-pad-x: 10px;
+  --project-text-pad-y: 10px;
+  --project-description-column-gap: 42px;
+
+  --motion-fast: 450ms;
+  --motion-medium: 700ms;
+}
+
+/* =========================================================
+   WEBFONT
+   Loads local DIN Regular.
+   ========================================================= */
+
+@font-face {
+  font-family: "DIN Regular Web";
+  src: url("../assets/fonts/dinregularwebfont.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--font-main);
+  font-weight: var(--site-font-weight);
+  color: var(--text-grey);
+}
+
+button,
+a {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover,
+button:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+/* =========================================================
+   HIDE SCROLLBARS
+   Scroll still works, but the visible scrollbar is removed.
+   ========================================================= */
+
+html,
+body,
+.page-about,
+.project-rail,
+.header-grid {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* Older Microsoft browsers */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.page-about::-webkit-scrollbar,
+.project-rail::-webkit-scrollbar,
+.header-grid::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari, Edge */
+  width: 0;
+  height: 0;
+}
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
+
+.page-main {
+  background: var(--main-bg);
+  overflow: hidden;
+}
+
+.main-stage {
+  position: fixed;
+  inset: 0;
+  background: var(--main-bg);
+  overflow: hidden;
+  transition: opacity var(--motion-medium) ease, filter var(--motion-medium) ease;
+}
+
+.main-stage.is-dimmed {
+  opacity: 0.35;
+  filter: blur(1px);
+}
+
+.visual-field {
+  position: absolute;
+  inset: 0;
+  background: var(--main-bg);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.visual-field img,
+.visual-field video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.visual-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: var(--main-bg);
+  color: var(--text-grey);
+  font-size: var(--small-text-size);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+/* Header is the invisible top interaction zone. */
+
+.site-header {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 20;
+  color: var(--text-grey);
+  font-size: var(--small-text-size);
+  line-height: 1.05;
+  font-weight: 500;
+  text-transform: uppercase;
+  transform: none;
+  transition: none;
+}
+
+.header-grid {
+  display: grid;
+  grid-template-columns:
+    var(--header-column-width)
+    var(--header-column-width)
+    var(--header-column-width)
+    var(--header-column-width)
+    var(--header-column-width)
+    var(--header-column-width);
+  column-gap: var(--header-column-gap);
+  align-items: start;
+  transform: none;
+  transition: none;
+}
+
+.header-column:not(.brand-column) {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-fast) ease;
+}
+
+.site-header:hover .header-column:not(.brand-column) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+.brand-button {
+  display: block;
+  color: var(--text-grey);
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.brand-sub-link {
+  display: block;
+  color: var(--text-grey);
+  text-transform: uppercase;
+  line-height: 1.05;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-fast) ease;
+}
+
+.site-header:hover .brand-sub-link {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.filter-title {
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+}
+
+.filter-button,
+.project-button,
+.about-link {
+  display: block;
+  margin: 0;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.filter-button.is-active,
+.project-button.is-matching {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.project-button {
+  white-space: nowrap;
+}
+
+/* =========================================================
+   PROJECT OVERLAY
+   ========================================================= */
+
+.project-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(189, 204, 212, 0.82);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-medium) ease;
+}
+
+.project-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.project-shell {
+  position: absolute;
+  left: var(--project-side-margin);
+  right: var(--project-side-margin);
+  top: var(--project-top-margin);
+  bottom: var(--project-bottom-margin);
+  display: flex;
+  flex-direction: column;
+  gap: var(--project-panel-gap);
+  transform: translateY(36px);
+  opacity: 0;
+  transition:
+    transform var(--motion-medium) ease,
+    opacity var(--motion-medium) ease;
+}
+
+.project-overlay.is-open .project-shell {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.project-panel {
+  background: var(--panel-fill);
+  border: var(--project-panel-border) solid var(--panel-stroke);
+  border-radius: var(--project-panel-radius);
+  color: var(--text-grey);
+  font-size: var(--small-text-size);
+  line-height: 1.15;
+  overflow: hidden;
+}
+
+.project-codebar {
+  height: var(--project-codebar-height);
+  flex: 0 0 var(--project-codebar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  text-transform: uppercase;
+}
+
+.project-visual-panel {
+  flex: 1 1 auto;
+  min-height: 220px;
+}
+
+.project-rail {
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+}
+
+.project-rail img,
+.project-rail video {
+  height: 100%;
+  width: auto;
+  flex: 0 0 auto;
+  display: block;
+  object-fit: contain;
+  background: var(--panel-fill);
+}
+
+.project-asset-placeholder {
+  height: 100%;
+  min-width: 560px;
+  display: grid;
+  place-items: center;
+  color: var(--text-grey);
+  background: var(--panel-fill);
+  border-right: 1px solid rgba(128, 128, 128, 0.45);
+  text-transform: uppercase;
+}
+
+.project-bottom-grid {
+  height: var(--project-bottom-height);
+  flex: 0 0 var(--project-bottom-height);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--project-panel-gap);
+}
+
+.project-meta-panel,
+.project-description-panel {
+  padding: var(--project-text-pad-y) var(--project-text-pad-x);
+  font-size: var(--small-text-size);
+  line-height: 1.15;
+  font-weight: 500;
+}
+
+/* Metadata panel:
+   one single text frame, top-left, matching the mockup. */
+.project-meta-panel {
+  display: block;
+}
+
+.project-meta-panel p,
+.project-meta-details p,
+.project-description-panel p {
+  margin: 0;
+}
+
+.project-meta-details {
+  display: none;
+}
+
+/* Description panel:
+   one text frame with two internal columns. */
+.project-description-panel {
+  overflow: hidden;
+}
+
+.project-description-columns {
+  height: 100%;
+  column-count: 2;
+  column-gap: var(--project-description-column-gap);
+  column-fill: balance;
+}
+
+.project-description-columns p {
+  margin: 0 0 12px 0;
+  break-inside: avoid;
+}
+
+/* =========================================================
+   ABOUT PAGE
+   ========================================================= */
+
+.page-about {
+  background: var(--about-bg);
+  color: var(--text-grey);
+  overflow-y: auto;
+}
+
+.about-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 260px 260px 1fr;
+  column-gap: 30px;
+  font-size: var(--small-text-size);
+  line-height: 1.05;
+  text-transform: uppercase;
+  background: transparent;
+}
+
+.about-brand {
+  grid-column: 1;
+}
+
+.about-contact {
+  grid-column: 2;
+}
+
+.about-contact p {
+  margin: 0 0 14px 0;
+}
+
+.about-content {
+  padding: 1px 0 120px 0;
+}
+
+.about-section {
+  display: grid;
+  grid-template-columns: 260px 290px minmax(320px, 850px);
+  column-gap: 30px;
+  padding: 0 20px;
+  margin-top: 64px;
+}
+
+.profile-section {
+  margin-top: 270px;
+}
+
+.about-section h1,
+.about-section h2 {
+  grid-column: 2;
+  margin: 0;
+  font-size: var(--about-body-size);
+  line-height: 1.05;
+  font-family: var(--font-main);
+  font-weight: var(--site-font-weight);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.about-body {
+  grid-column: 3;
+  padding-top: var(--about-body-offset);
+  font-size: var(--about-body-size);
+  line-height: 1.2;
+  font-family: var(--font-main);
+  font-weight: var(--site-font-weight);
+}
+.about-body p {
+  margin: 0 0 30px 0;
+}
+
+.about-body a {
+  text-decoration: none;
+}
+
+.about-body a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* =========================================================
+   RESPONSIVE FALLBACK
+   This does not define the final mobile design.
+   It only prevents the first prototype from breaking badly.
+   ========================================================= */
+
+@media (max-width: 900px) {
+  :root {
+    --about-body-size: 18px;
+    --header-column-width: 140px;
+    --header-column-gap: 18px;
+    --project-side-margin: 18px;
+    --project-bottom-height: 230px;
+  }
+
+  .header-grid {
+    grid-template-columns: repeat(6, var(--header-column-width));
+    overflow-x: auto;
+  }
+
+  .about-header,
+  .about-section {
+    grid-template-columns: 1fr;
+    row-gap: 18px;
+  }
+
+  .about-brand,
+  .about-contact,
+  .about-section h1,
+  .about-section h2,
+  .about-body {
+    grid-column: 1;
+  }
+
+  .about-body {
+    padding-top: 0;
+  }
+
+  .profile-section {
+    margin-top: 180px;
+  }
+
+  .project-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-meta-panel {
+    grid-template-columns: 1fr;
+    row-gap: 14px;
+  }
+
+  .project-description-panel {
+    column-count: 1;
+  }
+}
+/* =========================================================
+   PROJECT PAGE TEXT FRAME UPDATE
+   Metadata and description now follow the COP mockup setup.
+   ========================================================= */
+
+.project-meta-panel,
+.project-description-panel {
+  padding: var(--project-text-pad-y) var(--project-text-pad-x);
+  font-size: var(--small-text-size);
+  line-height: 1.15;
+  font-weight: 500;
+}
+
+/* Metadata panel:
+   one compact text block, fixed at the top-left of the left lower frame. */
+.project-meta-panel {
+  display: block;
+  overflow: hidden;
+}
+
+.project-meta-details {
+  display: block;
+  height: 100%;
+}
+
+.project-meta-details p {
+  margin: 0;
+}
+
+/* Description panel:
+   one text frame with two internal columns, matching the COP reference. */
+.project-description-panel {
+  display: block;
+  overflow: hidden;
+}
+
+.project-description-text {
+  height: 100%;
+  column-count: 2;
+  column-gap: var(--project-description-column-gap);
+  column-fill: balance;
+}
+
+.project-description-text p {
+  margin: 0 0 12px 0;
+  break-inside: avoid;
+}
+
+.project-description-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* Mobile / narrow fallback:
+   description returns to one column to avoid unreadable compressed text. */
+@media (max-width: 900px) {
+  .project-description-text {
+    column-count: 1;
+  }
+}
+
+/* =========================================================
+   PROJECT DESCRIPTION TEXT FLOW
+   Sequential two-column flow inside the right lower panel.
+   ========================================================= */
+
+.project-description-panel {
+  display: block;
+  overflow: hidden;
+  padding: var(--project-text-pad-y) var(--project-text-pad-x);
+  text-align: left;
+}
+
+/* 
+   This is the actual text frame.
+   Text starts at the left edge of the right panel,
+   fills the first column vertically,
+   then continues into the second column.
+*/
+.project-description-text {
+  width: 100%;
+  height: 100%;
+
+  column-count: 2;
+  column-gap: var(--project-description-column-gap);
+  column-fill: auto;
+
+  text-align: left;
+}
+
+/* 
+   Paragraphs remain part of one flowing text frame.
+   Do not use break-inside: avoid here, because the reference layout
+   allows text to continue naturally into the next column.
+*/
+.project-description-text p {
+  margin: 0 0 12px 0;
+  break-inside: auto;
+}
+
+/* Removes extra spacing after the final paragraph. */
+.project-description-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* Narrow-screen fallback. */
+@media (max-width: 900px) {
+  .project-description-text {
+    column-count: 1;
+  }
+}
+/* =========================================================
+   ABOUT PAGE HEADER FADE MASK
+   Makes scrolling body text fade out before it reaches
+   the fixed About header.
+   ========================================================= */
+
+:root {
+  /* Total height of the fade zone from the top of the viewport. */
+  --about-header-fade-height: 170px;
+
+  /* Fully opaque zone behind the fixed header.
+     Increase this if body text still visually touches the header. */
+  --about-header-solid-height: 88px;
+
+  /* Layer order:
+     content < fade mask < header */
+  --about-content-z: 1;
+  --about-fade-z: 20;
+  --about-header-z: 30;
+}
+
+/* Keeps the About page as the local stacking context. */
+.page-about {
+  position: relative;
+}
+
+/* The fixed fade veil.
+   It sits above the scrolling body content,
+   but below the fixed About header. */
+.page-about::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--about-header-fade-height);
+  z-index: var(--about-fade-z);
+  pointer-events: none;
+
+  background: linear-gradient(
+    to bottom,
+    var(--about-bg) 0,
+    var(--about-bg) var(--about-header-solid-height),
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+/* Header remains fully visible above the fade veil. */
+.about-header {
+  z-index: var(--about-header-z);
+}
+
+/* Body content scrolls underneath the fade veil. */
+.about-content {
+  position: relative;
+  z-index: var(--about-content-z);
+}
+/* =========================================================
+   ABOUT PAGE FONT WEIGHT NORMALISATION
+   Forces About page title and body text to use the same
+   locally hosted DIN Regular file.
+   ========================================================= */
+
+.page-about,
+.page-about button,
+.page-about a {
+  font-family: var(--font-main);
+  font-weight: 400;
+}
+
+.about-header,
+.about-brand,
+.about-contact,
+.about-section h1,
+.about-section h2,
+.about-body {
+  font-family: var(--font-main);
+  font-weight: 400;
+}
+/* =========================================================
+   ABOUT PAGE FONT WEIGHT NORMALISATION
+   ========================================================= */
+
+.page-about,
+.page-about button,
+.page-about a {
+  font-family: var(--font-main);
+  font-weight: 400;
+}
+
+.about-header,
+.about-brand,
+.about-contact,
+.about-section h1,
+.about-section h2,
+.about-body {
+  font-family: var(--font-main);
+  font-weight: 400;
+}
+/* =========================================================
+   ABOUT PAGE FONT WEIGHT NORMALISATION
+   Forces About page title and body text to use DIN Medium.
+   ========================================================= */
+
+.page-about,
+.page-about button,
+.page-about a {
+  font-family: var(--font-main);
+  font-weight: 500;
+}
+
+.about-header,
+.about-brand,
+.about-contact,
+.about-section h1,
+.about-section h2,
+.about-body {
+  font-family: var(--font-main);
+  font-weight: 500;
+}

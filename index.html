@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hanczhang</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="page-main">
+  <main id="mainStage" class="main-stage">
+    <section id="visualField" class="visual-field" aria-label="Visual asset field"></section>
+
+    <header class="site-header" aria-label="Main navigation">
+      <div class="header-grid">
+        <div class="header-column brand-column">
+  <button id="homeReset" class="brand-button" type="button">
+    HANCZHANG
+  </button>
+
+  <a
+    class="brand-sub-link"
+    href="https://www.instagram.com/hanczhang/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    @HANCZHANG
+  </a>
+</div>
+
+        <nav class="header-column filter-column" aria-label="Category filter">
+          <p class="filter-title">_CATEGORY</p>
+          <button class="filter-button" type="button" data-filter-group="category" data-filter-value="research">RESEARCH</button>
+          <button class="filter-button" type="button" data-filter-group="category" data-filter-value="exhibition">EXHIBITION</button>
+          <button class="filter-button" type="button" data-filter-group="category" data-filter-value="object">OBJECT</button>
+        </nav>
+
+        <nav class="header-column filter-column" aria-label="Format filter">
+          <p class="filter-title">_FORMAT</p>
+          <button class="filter-button" type="button" data-filter-group="format" data-filter-value="moving-image">MOVING IMAGE</button>
+          <button class="filter-button" type="button" data-filter-group="format" data-filter-value="installation">INSTALLATION</button>
+          <button class="filter-button" type="button" data-filter-group="format" data-filter-value="sound">SOUND</button>
+        </nav>
+
+        <nav class="header-column filter-column" aria-label="Asset filter">
+          <p class="filter-title">_ASSET</p>
+          <button class="filter-button" type="button" data-filter-group="asset" data-filter-value="photo">PHOTO</button>
+          <button class="filter-button" type="button" data-filter-group="asset" data-filter-value="rendering">RENDERING</button>
+          <button class="filter-button" type="button" data-filter-group="asset" data-filter-value="recording">RECORDING</button>
+          <button class="filter-button" type="button" data-filter-group="asset" data-filter-value="note">NOTE</button>
+          <button class="filter-button" type="button" data-filter-group="asset" data-filter-value="text">TEXT</button>
+          <button class="filter-button" type="button" data-filter-group="asset" data-filter-value="archive">ARCHIVE</button>
+        </nav>
+
+        <nav class="header-column project-column" aria-label="Project list">
+          <p class="filter-title">_PROJECT</p>
+          <button class="project-button" type="button" data-project="cop">CLOUD OF POLYPHONY</button>
+          <button class="project-button" type="button" data-project="lr">LIMINAL REVERBERATION</button>
+          <button class="project-button" type="button" data-project="lt">LANDSCAPE TRANSFER</button>
+          <button class="project-button" type="button" data-project="oct">OCTOPUS</button>
+          <button class="project-button" type="button" data-project="sa">SOLAR ATLAS</button>
+        </nav>
+
+        <nav class="header-column about-column" aria-label="About page">
+          <a class="about-link" href="about.html">ABOUT</a>
+        </nav>
+      </div>
+    </header>
+  </main>
+
+  <aside id="projectOverlay" class="project-overlay" aria-hidden="true">
+    <section id="projectShell" class="project-shell" aria-label="Project page overlay">
+      <div class="project-codebar project-panel">
+        <span id="projectCode">HC-COP</span>
+      </div>
+
+      <div class="project-visual-panel project-panel">
+        <div id="projectRail" class="project-rail"></div>
+      </div>
+
+      <div class="project-bottom-grid">
+  <div class="project-meta-panel project-panel">
+    <div id="projectMetaDetails" class="project-meta-details"></div>
+  </div>
+
+  <div class="project-description-panel project-panel">
+    <div id="projectDescription" class="project-description-text"></div>
+  </div>
+</div>
+    </section>
+  </aside>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
