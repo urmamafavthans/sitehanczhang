@@ -933,3 +933,33 @@ body::-webkit-scrollbar,
   opacity: 0;
   pointer-events: none;
 }
+/* =========================================================
+   ABOUT PAGE CONTACT TEXT FIX
+   Keeps CONTACT / EMAIL / LOCATION in uppercase,
+   with the same vertical rhythm as the Main page filter header.
+   ========================================================= */
+
+.about-contact {
+  text-transform: uppercase;
+  font-size: var(--small-text-size);
+  line-height: 1.05;
+  font-weight: 400;
+}
+
+.about-contact-title {
+  margin: 0 0 08px 0;
+}
+
+.about-contact-details {
+  margin: 0;
+}
+
+.about-contact a {
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.about-contact a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
