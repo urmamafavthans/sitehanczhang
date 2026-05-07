@@ -23,7 +23,7 @@
 
   --small-text-size: 11px;
   --about-body-size: 24px;
-  --about-body-offset: calc(var(--about-body-size) * 1.2);
+  --about-body-offset: calc(var(--about-body-size) * 2.0);
 
   --header-padding-x: 20px;
   --header-padding-y: 20px;
@@ -126,27 +126,22 @@ body::-webkit-scrollbar,
    ========================================================= */
 
 .page-main {
-  background: var(--main-bg);
+  background: transparent;
   overflow: hidden;
 }
 
 .main-stage {
   position: fixed;
   inset: 0;
-  background: var(--main-bg);
+  background: transparent;
   overflow: hidden;
   transition: opacity var(--motion-medium) ease, filter var(--motion-medium) ease;
-}
-
-.main-stage.is-dimmed {
-  opacity: 0.35;
-  filter: blur(1px);
 }
 
 .visual-field {
   position: absolute;
   inset: 0;
-  background: var(--main-bg);
+  background: transparent;
   cursor: pointer;
   z-index: 1;
 }
@@ -164,9 +159,12 @@ body::-webkit-scrollbar,
   height: 100%;
   display: grid;
   place-items: center;
-  background: var(--main-bg);
+
+  background: transparent;
+
   color: var(--text-grey);
   font-size: var(--small-text-size);
+  line-height: 1.05;
   letter-spacing: 0.01em;
   text-transform: uppercase;
 }
@@ -269,7 +267,9 @@ body::-webkit-scrollbar,
   position: fixed;
   inset: 0;
   z-index: 20;
-  background: rgba(189, 204, 212, 0.82);
+
+  background: transparent;
+
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--motion-medium) ease;
@@ -348,9 +348,14 @@ body::-webkit-scrollbar,
   min-width: 560px;
   display: grid;
   place-items: center;
+
+  background: transparent;
+  border-right: none;
+
   color: var(--text-grey);
-  background: var(--panel-fill);
-  border-right: 1px solid rgba(128, 128, 128, 0.45);
+  font-size: var(--small-text-size);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
 }
 
@@ -414,20 +419,46 @@ body::-webkit-scrollbar,
   overflow-y: auto;
 }
 
+/* Fixed header:
+   The header stays in place while the long About content scrolls underneath.
+   It keeps the same small DIN text system as the Main page. */
+
 .about-header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10;
+  z-index: 20;
   padding: 20px;
   display: grid;
   grid-template-columns: 260px 260px 1fr;
   column-gap: 30px;
   font-size: var(--small-text-size);
   line-height: 1.05;
-  text-transform: uppercase;
+  font-weight: 700;
+  text-transform: none;
   background: transparent;
+}
+
+/* Fade mask:
+   This creates the soft fade-out area before the scrolling body reaches the header.
+   It prevents the large body text from visually colliding with the fixed header. */
+
+.page-about::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  z-index: 15;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.96) 35%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 
 .about-brand {
@@ -446,6 +477,11 @@ body::-webkit-scrollbar,
   padding: 1px 0 120px 0;
 }
 
+/* About section grid:
+   Column 1 = empty structural margin
+   Column 2 = section title
+   Column 3 = body text */
+
 .about-section {
   display: grid;
   grid-template-columns: 260px 290px minmax(320px, 850px);
@@ -458,39 +494,68 @@ body::-webkit-scrollbar,
   margin-top: 270px;
 }
 
+/* Section titles:
+   text-transform is disabled so the visible text follows the capitalization
+   written directly inside about.html. */
+
 .about-section h1,
 .about-section h2 {
   grid-column: 2;
   margin: 0;
   font-size: var(--about-body-size);
   line-height: 1.05;
-  font-family: var(--font-main);
-  font-weight: var(--site-font-weight);
-  text-transform: uppercase;
+  font-weight: 700;
+  text-transform: none;
   white-space: nowrap;
 }
+
+/* Body text:
+   The padding-top creates the one-line drop below each section title.
+   Increase --about-body-offset if the body needs to sit lower. */
 
 .about-body {
   grid-column: 3;
   padding-top: var(--about-body-offset);
   font-size: var(--about-body-size);
   line-height: 1.2;
-  font-family: var(--font-main);
-  font-weight: var(--site-font-weight);
+  font-weight: 700;
 }
+
 .about-body p {
   margin: 0 0 30px 0;
 }
 
+/* General About links:
+   Links are visually quiet by default.
+   They only underline on hover, matching the reduced interface logic. */
+
 .about-body a {
+  color: inherit;
   text-decoration: none;
 }
 
-.about-body a:hover {
+/* Block links:
+   Used for entries such as 'Encounter', NEXT GEN DESIGN, and Gijs Bakker Award Nominee.
+   The whole entry is clickable, but only the key title receives underline feedback. */
+
+.about-entry-link {
+  display: block;
+  margin: 0 0 30px 0;
+}
+
+.about-entry-link:hover .about-link-title {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
+/* Inline links:
+   Used inside Press Archive lines.
+   Only the project/article title is clickable and underlined on hover. */
+
+.about-inline-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 /* =========================================================
    RESPONSIVE FALLBACK
    This does not define the final mobile design.
@@ -775,4 +840,96 @@ body::-webkit-scrollbar,
 .about-body {
   font-family: var(--font-main);
   font-weight: 500;
+}
+/* =========================================================
+   PROJECT OPEN BACKGROUND FADE
+   Keeps the Main page asset visible behind the Project page,
+   but fades it softly without adding a grey placeholder layer.
+   Paste at the very end of style.css.
+   ========================================================= */
+
+:root {
+  /* Main page fade layer while project page is open.
+     Increase alpha for stronger fade: 0.65
+     Decrease alpha for clearer image: 0.35 */
+  --project-backdrop-fade-color: rgba(0, 0, 0, 0.55);
+
+  /* Image treatment behind the project page.
+     1 = normal brightness
+     0.75 = darker / more recessed */
+  --project-backdrop-brightness: 0.2;
+
+  /* Soft optical separation.
+     Use 0px if you want the background fully sharp. */
+  --project-backdrop-blur: 0.8px;
+}
+
+/* The main stage should not disappear as a whole.
+   The fade is applied only to the visual asset, not to the whole page layer. */
+.main-stage.is-dimmed {
+  opacity: 1;
+  filter: none;
+}
+
+/* Keep the visual field as the local layering area. */
+.visual-field {
+  position: absolute;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Main asset layer.
+   This makes the image/video fade visually while remaining present. */
+.visual-field img,
+.visual-field video {
+  position: relative;
+  z-index: 1;
+  transition:
+    filter var(--motion-medium) ease,
+    opacity var(--motion-medium) ease;
+}
+
+/* Soft fade veil above the main asset.
+   This is not an image file and not a placeholder;
+   it is only a CSS overlay used when a project is open. */
+.visual-field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: var(--project-backdrop-fade-color);
+  opacity: 0;
+  transition: opacity var(--motion-medium) ease;
+}
+
+/* Active faded state when project page is open. */
+.main-stage.is-dimmed .visual-field img,
+.main-stage.is-dimmed .visual-field video {
+  filter:
+    brightness(var(--project-backdrop-brightness))
+    blur(var(--project-backdrop-blur));
+}
+
+.main-stage.is-dimmed .visual-field::after {
+  opacity: 1;
+}
+
+/* The project overlay itself stays transparent.
+   This prevents a solid grey layer from covering the main page asset. */
+.project-overlay {
+  background: transparent !important;
+}
+
+/* Project page remains above the faded main page. */
+.project-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Hide the Main page header while the Project page is open.
+   Remove this block if you want HANCZHANG to remain visible behind projects. */
+.main-stage.is-dimmed .site-header {
+  opacity: 0;
+  pointer-events: none;
 }
